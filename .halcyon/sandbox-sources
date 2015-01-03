@@ -1,0 +1,15 @@
+ghc-parser
+https://github.com/mietek/arithmoi
+ihaskell
+ihaskell-display/ihaskell-aeson
+ihaskell-display/ihaskell-basic
+ihaskell-display/ihaskell-blaze
+ihaskell-display/ihaskell-charts
+ihaskell-display/ihaskell-diagrams
+ihaskell-display/ihaskell-hatex
+ihaskell-display/ihaskell-juicypixels
+ihaskell-display/ihaskell-magic
+ihaskell-display/ihaskell-parsec
+ihaskell-display/ihaskell-rlangqq
+ihaskell-display/ihaskell-widgets
+ipython-kernel

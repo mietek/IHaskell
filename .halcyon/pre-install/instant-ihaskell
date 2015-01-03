@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+# TODO: Either wrap pkg-config to always --define-variable=prefix=..., or rewrite each *.pc to replace prefix definitions.
+
+export CPATH=/app/usr/include/python2.7:$CPATH
+export IHASKELL_IPYTHON_ARGS='--no-browser --ip=* --port=8080'
+
+cabal exec -- IHaskell notebook

@@ -1,0 +1,4 @@
+linux-ubuntu-14:libpython2.7
+linux-ubuntu-14:libpython2.7-dev
+linux-ubuntu-14:libpython2.7-stdlib
+linux-centos-7:python-libs

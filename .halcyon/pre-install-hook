@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+
+source "${HALCYON_DIR}/src.sh"
+
+
+pre_install_hook () {
+	expect_vars HALCYON_BASE
+
+	local tag source_dir install_dir data_dir
+	expect_args tag source_dir install_dir data_dir -- "$@"
+
+	log 'Archiving profile templates'
+
+	local prefix sub_dir ihaskell_label ihaskell_data_dir
+	prefix=$( get_tag_prefix "${tag}" ) || return 1
+	sub_dir=$( dirname "${data_dir#${HALCYON_BASE}}" ) || return 1
+	ihaskell_label=$( detect_label "${source_dir}/ihaskell" ) || return 1
+	ihaskell_data_dir="${HALCYON_BASE}/sandbox/${sub_dir}/${ihaskell_label}"
+
+	copy_dir_over "${source_dir}/ihaskell/installation" \
+		"${install_dir}${ihaskell_data_dir}/installation" || return 1
+	create_archive "${source_dir}/ihaskell/profile" \
+		"${install_dir}${ihaskell_data_dir}/profile/profile.tar" || return 1
+
+	copy_file "${source_dir}/.halcyon/pre-install/instant-ihaskell" \
+		"${install_dir}${prefix}/bin/instant-ihaskell" || return 1
+}
+
+
+pre_install_hook "$@"

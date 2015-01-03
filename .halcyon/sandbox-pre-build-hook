@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+source "${HALCYON_DIR}/src.sh"
+
+
+sandbox_pre_build_hook () {
+	local tag source_dir constraints
+	expect_args tag source_dir constraints -- "$@"
+
+	local zeromq_version zeromq_url zeromq_build_dir
+	zeromq_version='4.0.5'
+	zeromq_url="http://download.zeromq.org/zeromq-${zeromq_version}.tar.gz"
+	zeromq_build_dir=$( get_tmp_dir 'halcyon-zeromq-source' ) || return 1
+
+	log 'Installing ZeroMQ'
+
+	acquire_original_source "${zeromq_url}" "${zeromq_build_dir}" || return 1
+
+	if ! (
+		cd "${zeromq_build_dir}/zeromq-${zeromq_version}" &&
+		./configure --prefix="${HALCYON_BASE}/sandbox/usr" 2>&1 | quote &&
+		make install 2>&1 | quote
+	); then
+		log_error 'Failed to install ZeroMQ'
+		return 1
+	fi
+
+	log 'ZeroMQ installed'
+	log
+
+	local magic_dir
+	magic_dir="${source_dir}/.halcyon/sandbox-gtk2hs-buildtools-0.13.0.3"
+
+	local -a opts_a
+	opts_a=()
+	opts_a+=( --root='/' )
+	opts_a+=( --prefix="${HALCYON_BASE}/sandbox" )
+	opts_a+=( --constraints="${magic_dir}/constraints" )
+	opts_a+=( --sandbox-extra-apps="${magic_dir}/sandbox-extra-apps" )
+	opts_a+=( --sandbox-extra-apps-constraints="${magic_dir}/sandbox-extra-apps-constraints" )
+
+	halcyon install "${opts_a[@]}" 'gtk2hs-buildtools-0.13.0.3' || return 1
+}
+
+
+sandbox_pre_build_hook "$@"
